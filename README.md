@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository is reconstructed from alecthomas's log4go, which is a logging package similar to log4j for the Go programming language.
+This repository is reconstructed from jeanphorn's log4go, which is a logging package similar to log4j for the Go programming language.
 
 Two new features are supported: one is Json config style, and the other is different output according to category.
 
@@ -25,11 +25,11 @@ Two new features are supported: one is Json config style, and the other is diffe
 
 First, get the code from this repo. 
 
-```go get github.com/jeanphorn/log4go```
+```go get github.com/huangapple/log4go```
 
 Then import it to your project.
 
-```import log "github.com/jeanphorn/log4go"```
+```import log "github.com/huangapple/log4go"```
 
 
 ## Examples
@@ -79,7 +79,7 @@ Code example:
 package main
 
 import (
-	log "github.com/jeanphorn/log4go"
+	log "github.com/huangapple/log4go"
 )
 
 func main() {
