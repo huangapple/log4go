@@ -5,8 +5,10 @@ package log4go
 import (
 	"fmt"
 	"os"
-	"time"
+	"path"
+	"path/filepath"
 	"strings"
+	"time"
 )
 
 // This log writer sends output to a file
@@ -41,7 +43,7 @@ type FileLogWriter struct {
 	maxbackup int
 
 	// Sanitize newlines to prevent log injection
-	sanitize	bool
+	sanitize bool
 }
 
 // This is the FileLogWriter's output method
@@ -190,6 +192,17 @@ func (w *FileLogWriter) intRotate() error {
 			}
 
 		}
+	}
+	{
+		//创建日记目录,
+		dirPath, _ := os.Getwd()
+		var baseDir string
+		if filepath.IsAbs(w.filename) {
+			baseDir = path.Dir(w.filename)
+		} else {
+			baseDir = path.Join(dirPath, path.Dir(w.filename))
+		}
+		os.MkdirAll(baseDir, os.ModePerm)
 	}
 
 	// Open the log file

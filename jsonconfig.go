@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/toolkits/file"
@@ -38,7 +40,7 @@ type FileConfig struct {
 	Maxsize  string `json:"maxsize"`  // \d+[KMG]? Suffixes are in terms of 2**10
 	Maxlines string `json:"maxlines"` //\d+[KMG]? Suffixes are in terms of thousands
 	Daily    bool   `json:"daily"`    //Automatically rotates by day
-	Sanitize bool	`json:"sanitize"` //Sanitize newlines to prevent log injection
+	Sanitize bool   `json:"sanitize"` //Sanitize newlines to prevent log injection
 }
 
 type SocketConfig struct {
@@ -84,7 +86,13 @@ func (log Logger) LoadJsonConfiguration(filename string) {
 		fmt.Fprintf(os.Stderr, "LoadJsonConfiguration: Error: Could not parse json configuration in %q: %s\n", filename, err)
 		os.Exit(1)
 	}
-
+	if runtime.GOOS == "windows" {
+		for _, v := range lc.Files {
+			if !filepath.IsAbs(v.Filename) && !strings.HasPrefix(v.Filename, "./") {
+				v.Filename = "./" + v.Filename
+			}
+		}
+	}
 	if lc.Console.Enable {
 		filt, _ := jsonToConsoleLogWriter(filename, lc.Console)
 		log["stdout"] = &Filter{getLogLevel(lc.Console.Level), filt, "DEFAULT"}
