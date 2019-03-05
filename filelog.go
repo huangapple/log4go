@@ -5,7 +5,6 @@ package log4go
 import (
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -198,9 +197,9 @@ func (w *FileLogWriter) intRotate() error {
 		dirPath, _ := os.Getwd()
 		var baseDir string
 		if filepath.IsAbs(w.filename) {
-			baseDir = path.Dir(w.filename)
+			baseDir = filepath.Dir(w.filename)
 		} else {
-			baseDir = path.Join(dirPath, path.Dir(w.filename))
+			baseDir = filepath.Join(dirPath, filepath.Dir(w.filename))
 		}
 		os.MkdirAll(baseDir, os.ModePerm)
 	}
